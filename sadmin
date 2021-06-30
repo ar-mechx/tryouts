@@ -1,4 +1,4 @@
-#Crm Propery File
+#Crm Propery File 
 #Tue Nov 17 17:27:51 EET 2020
 logging.level.=error
 
@@ -12,22 +12,22 @@ logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n
 spring.jpa.hibernate.ddl-auto=update
 multitenancy.tenants[0].name=stage
 multitenancy.tenants[0].url=jdbc:oracle:thin:@192.168.3.45:1521:orcl?driver=oracle.jdbc.OracleDriver
-spring.config.location=file:${user.home}/.Smart2GoConfig/
+spring.config.location=file:${user.home}/.NGCRMConfig/
 logging.level.org.hibernate.SQL=error
 spring.jpa.generate-ddl=true
-spring.datasource.max-active=10
+spring.datasource.max-active=${DBMAXCONNECTIONS:50}
 multitenancy.tenants[0].default=true
 spring.jpa.properties.hibernate.default_schema=SMART2GO_ADMIN_ETISALAT
 
 log_files=
 createifnoteexist=DO $$   BEGIN  BEGIN  ALTER TABLE TableName ADD COLUMN ColumnName ColumnType; EXCEPTION  WHEN duplicate_column THEN RAISE NOTICE 'column ColumnName already exists in TableName.'; END;  END;  $$
 embeded=false
-multitenancy.tenants[0].driver-class-name=org.postgresql.Driver
+multitenancy.tenants[0].driver-class-name=net.bull.javamelody.JdbcDriver
 enable.developer.logs=true
 spring.jpa.show-sql=false
 renameColumn=ALTER TABLE TableName RENAME COLUMN oldName TO newName
 sizeRowCount=1000
-spring.datasource.initial-size=2
+spring.datasource.initial-size=${DBINITCONNECTIONS:5}
 spring.config.name=.application
 CachThreadLifeTime=3600000
 createTableIFNotExist=CREATE TABLE IF NOT EXISTS TableName(
