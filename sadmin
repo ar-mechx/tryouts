@@ -1,0 +1,37 @@
+#Crm Propery File
+#Tue Nov 17 17:27:51 EET 2020
+logging.level.=error
+
+spring.devtools.livereload.port=35732
+multitenancy.tenants[0].password=SMART2GO_ADMIN_ETISALAT
+spring.jta.enabled=false
+isSAdminRepo=true
+multitenancy.tenants[0].username=SMART2GO_ADMIN_ETISALAT
+server.port=9090
+logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n
+spring.jpa.hibernate.ddl-auto=update
+multitenancy.tenants[0].name=stage
+multitenancy.tenants[0].url=jdbc:oracle:thin:@192.168.3.45:1521:orcl?driver=oracle.jdbc.OracleDriver
+spring.config.location=file:${user.home}/.Smart2GoConfig/
+logging.level.org.hibernate.SQL=error
+spring.jpa.generate-ddl=true
+spring.datasource.max-active=10
+multitenancy.tenants[0].default=true
+spring.jpa.properties.hibernate.default_schema=SMART2GO_ADMIN_ETISALAT
+
+log_files=
+createifnoteexist=DO $$   BEGIN  BEGIN  ALTER TABLE TableName ADD COLUMN ColumnName ColumnType; EXCEPTION  WHEN duplicate_column THEN RAISE NOTICE 'column ColumnName already exists in TableName.'; END;  END;  $$
+embeded=false
+multitenancy.tenants[0].driver-class-name=org.postgresql.Driver
+enable.developer.logs=true
+spring.jpa.show-sql=false
+renameColumn=ALTER TABLE TableName RENAME COLUMN oldName TO newName
+sizeRowCount=1000
+spring.datasource.initial-size=2
+spring.config.name=.application
+CachThreadLifeTime=3600000
+createTableIFNotExist=CREATE TABLE IF NOT EXISTS TableName(
+
+postModuleVersion=${CRM_FOUNDATION_URL:http://127.0.0.1:8080}/rest/aboutSystem/postModuleVersion
+# get values from pom.xml
+pom.version=1.2.0-Alpha2
