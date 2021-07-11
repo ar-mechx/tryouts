@@ -13,7 +13,7 @@ NTG.WFEngine.CacheEmployeeInfoFor=300000
 
 server.port=${PORT:9091}
 ####### SPRING JPA ############
-spring.jpa.database=POSTGRESQL
+spring.jpa.database=oracle
 spring.jpa.show-sql=false
 spring.jpa.hibernate.ddl-auto=update
 
@@ -27,16 +27,14 @@ spring.jpa.hibernate.ddl-auto=update
 ####### POSTGRES ############
 
 ####### orcle ############
-spring.datasource.username=SMART2GO_ETISALAT
-spring.datasource.url=jdbc:oracle:thin:@192.168.3.160:1521:orcl?driver=oracle.jdbc.OracleDriver
-
+spring.datasource.username=smart2go
+spring.datasource.url=jdbc:oracle:thin:@localhost:1521:SE
 #spring.datasource.schemaname=ng_crm_07022018
-spring.jpa.properties.hibernate.default_schema=SMART2GO_ETISALAT
-spring.datasource.password=SMART2GO_ETISALAT
-
+spring.jpa.properties.hibernate.default_schema=smart2go
+spring.datasource.password=hggi
+#Allows Hibernate to generate SQL optimized for a particular DBMS
 spring.jpa.hibernate.naming.implicit-strategy=org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyHbmImpl
 spring.jpa.hibernate.naming.physical-strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
-# Allows Hibernate to generate SQL optimized for a particular DBMS
 ####### orcle ############
 
 ######## MailSettings Cloud ############
