@@ -1,0 +1,93 @@
+spring.devtools.livereload.port=35734
+log_files=file:${user.home}/.Smart2GoConfig/log
+#
+NTG.WFEngine.PendingTasks.ReadThreads=2
+NTG.WFEngine.PendingTasks.ProcessingThreads=10
+NTG.WFEngine.PendingTasks.pmpprocesstasks=2
+NTG.WFEngine.PendingTasks.pmpswitchtasks=2
+NTG.WFEngine.SaveThread.PoolSizeForDBPost=50000
+NTG.WFEngine.SaveThread.BlockIfPoolSizeRetchTo=100000
+NTG.WFEngine.SaveThread.ForceSaveEvery=90000
+NTG.WFEngine.TaskEscalation.EscalationReadThreads=2
+NTG.WFEngine.CacheEmployeeInfoFor=300000
+#
+server.port=${PORT:9091}
+####### SPRING JPA ############
+spring.jpa.database=oracle
+spring.jpa.show-sql=false
+spring.jpa.hibernate.ddl-auto=update
+####### SPRING JPA ############
+#
+####### POSTGRES ############
+#spring.datasource.driver-class-name=org.postgresql.Driver
+#spring.datasource.url=jdbc:postgresql://localhost:5432/scheduledemo
+#spring.datasource.username=postgres
+#spring.datasource.password=hggi
+####### POSTGRES ############
+#
+####### orcle ############
+spring.datasource.username=SMART2GO_ETISALAT
+spring.datasource.url=jdbc:oracle:thin:@192.168.3.160:1521:SE
+spring.datasource.driver.class-name=oracle.jdbc.OracleDriver
+#spring.datasource.schemaname=ng_crm_07022018
+spring.jpa.properties.hibernate.default_schema=SMART2GO_ETISALAT
+spring.datasource.password=SMART2GO_ETISALAT
+spring.jpa.hibernate.naming.implicit-strategy=org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyHbmImpl
+spring.jpa.hibernate.naming.physical-strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+# Allows Hibernate to generate SQL optimized for a particular DBMS
+####### orcle ############
+#
+######## MailSettings Cloud ############
+mailSettings.mailServer=smtp.office365.com
+mailSettings.serverPort=587
+mailSettings.authentication=NTLM
+mailSettings.userName=Tsystem@ntgclarity.com
+mailSettings.fromMailAddress=Tsystem@ntgclarity.com
+mailSettings.password=P@ssw0rd
+mailSettings.auth=true
+mailSettings.starttls=true
+mailSettings.ssl=false
+mailSettings.socketFactoryPort=
+mailSettings.socketFactoryClass=
+#
+######## MailSettings ############
+wf_GetEmail=${CORE_FOUNDATION_URL:http://127.0.0.1:9090}/ITTS_UserMgm_WS/rest/UserManagment/APIs/wf_GetEmail
+wf_GetEmployeesEmails=${CORE_FOUNDATION_URL:http://127.0.0.1:9090}/ITTS_UserMgm_WS/rest/UserManagment/APIs/wf_GetEmployeesEmails
+wf_checkRules=${CRM_FOUNDATION_URL:http://127.0.0.1:8080}/rest/ruleBuilder/checkRules
+wf_routeTasks=${CRM_FOUNDATION_URL:http://127.0.0.1:8080}/rest/WorkFlow/routingTasks
+wf_updatePlan=${CRM_FOUNDATION_URL:http://127.0.0.1:8080}/rest/WorkFlow/updatePlan
+wf_pushNotification=${CRM_FOUNDATION_URL:http://127.0.0.1:8080}/rest/WorkFlow/pushNotification
+wf_numberMailJobs=1
+wf_pendingMailPoolSize=2
+wf_GetGroupEmail=${CORE_FOUNDATION_URL:http://127.0.0.1:9090}/ITTS_UserMgm_WS/rest/UserManagment/APIs/wf_GetGroupEmail
+wf_GetEmployee=${CORE_FOUNDATION_URL:http://127.0.0.1:9090}/ITTS_UserMgm_WS/rest/UserManagment/APIs/GetEmployeeFullInformation
+crm_GetEmployeeMangers=${CORE_FOUNDATION_URL:http://127.0.0.1:9090}/ITTS_UserMgm_WS/rest/UserManagment/APIs/GetEmployeeMangers
+NTG.WFEngine.EnbaleDebugPrint=true
+NTG.WFEngine.SleepPeriodOnNoDataFound=10000
+#
+####### Rule Settings ############
+loginSettings.systemUserName=${LOGINUSERNAME:engine}
+loginSettings.password=${LOGINPASSWORD:ntg}
+loginSettings.companyName=${LOGINCOMPANY:stage}
+loginSettings.url=${CRM_FOUNDATION_URL:http://127.0.0.1:8080}
+loginSettings.host=${LOGINHOST:http://127.0.0.1:3000/}
+####### Rule Settings ############
+#
+####### AssignmentRule ############
+GroupMembers=${CORE_FOUNDATION_URL:http://127.0.0.1:9090}/ITTS_UserMgm_WS/rest/UserManagment/APIs/GetGroupMember
+checkAssignmentRules=${CRM_FOUNDATION_URL:http://127.0.0.1:8080}/rest/WorkFlow/checkAssignmentRules
+wf_loadObject=${CRM_FOUNDATION_URL:http://127.0.0.1:8080}/rest/WorkFlow/loadObject
+postModuleVersion=${CRM_FOUNDATION_URL:http://127.0.0.1:8080}/rest/aboutSystem/postModuleVersion
+GetEmailTemplateByID=${CRM_FOUNDATION_URL:http://127.0.0.1:8080}/rest/Email/ByID
+####### AssignmentRule ############
+#
+####### Backup application.propetires ############
+#spring.jpa.database-platform=org.hibernate.dialect.Oracle10gDialect
+#spring.jpa.properties.hibernate.dialect=com.ntg.common.DBCompatibilityHelper.PostgreSQLDialectCustom
+#spring.datasource.driver-class-name=net.bull.javamelody.JdbcDriver
+#
+# get values from pom.xml
+pom.version=4.2.0-Alpha2
+#
+##CLOB Issue fix
+spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true
