@@ -1,0 +1,46 @@
+pipeline {
+    agent any
+    parameters {
+        choice(
+            choices: ['Option A', 'Option B', 'Option C'],
+            description: 'Choose the build option',
+            name: 'BUILD_OPTION'
+        )
+    }
+    stages {
+        stage('Stage 1') {
+            steps {
+                echo 'This is Stage 1 - Always executed'
+            }
+        }
+        stage('Stage 2') {
+            when {
+                expression { params.BUILD_OPTION == 'Option A' }
+            }
+            steps {
+                echo 'This is Stage 2 - Only executed with Option A'
+            }
+        }
+        stage('Stage 3') {
+            when {
+                expression { params.BUILD_OPTION == 'Option B' }
+            }
+            steps {
+                echo 'This is Stage 3 - Only executed with Option B'
+            }
+        }
+        stage('Stage 4') {
+            when {
+                expression { params.BUILD_OPTION == 'Option C' }
+            }
+            steps {
+                echo 'This is Stage 4 - Only executed with Option C'
+            }
+        }
+        stage('Stage 5') {
+            steps {
+                echo 'This is Stage 5 - Always executed'
+            }
+        }
+    }
+}
