@@ -1,0 +1,160 @@
+library identifier: 'lib@prodaction', retriever: legacySCM([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'smtp', url: 'http://10.208.202.252/cicd/sharedlib.git']]])
+
+pomPath = './pom.xml'
+
+pipeline {
+   
+    options {
+        disableConcurrentBuilds()
+    }
+
+	agent {
+        label 'android'
+    }
+
+    parameters {
+        choice(
+            choices: ['Container', 'Option B', 'Option C'],
+            description: 'Choose the build option',
+            name: 'BUILD_OPTION'
+        )
+    }
+
+    tools { 
+        jdk 'jdk8' 
+    }
+
+    environment {
+        SNABSHOT_NAME = "oms-hosted"
+        RELEASE_NAME =  "oms-hosted"
+        pom = readMavenPom file: pomPath
+        JAR_VERSION = pom.getVersion()
+        JAR_ARTIFACTID = pom.getArtifactId()
+        JAR_GROUPID = pom.getGroupId()
+        NEXUS_URL_snapshot = "http://10.208.202.205:8081/repository/oms-hosted-snapshot/"
+        NEXUS_URL_Release = "http://10.208.202.205:8081/repository/oms-hosted-release/"
+        REPO_NAME = "oms-hosted-release"
+        PASSWORD_NEXUS = credentials("nexus_cpm_password")
+        USERNAME_NEXUS = credentials("nexus_cpm_username")
+
+        EMAIL_TO ="abdelrahman.rfahmy@etisalat.com"
+
+        IMAGE_TAG = pom.getVersion()
+        DEP_ENV = "ocp"
+        IMAGE_REPO_NAME= 'channelmanagment'
+        oc_project= 'prod-channelmanagment'
+
+        DEPLOYMENT_PATH = "./prod-channel-management-core/deployment.yaml"
+        CD_REPO = "git@10.208.202.252:prod-infrastructure-environment/psrod-channel-management-core.git"
+        CD_BRANCH = "master"
+
+        OC_USER_4=credentials("oc_prod_kubeadmin")
+        OC_PASS_4=credentials("oc_prod_kubeadmin_pwd")
+
+        PLAYBOOKROLLBACK_NAME = "prod-omsrollback.yaml"
+        PASS_TO = "alaa.kotb@etisalat.com,ITIntegrationServiceSupport.eg@etisalat.com"
+        INMESSAGE = " "
+        ANSIBLE_USER = "ansible"
+        IP = "10.208.202.110"
+        PROJECT_PATH = "/home/ansible/oms"
+        JAR_NAME = 'OMSCore'
+        JAR_HOME = './target/OMSCore*.jar'
+        PLAYBOOK_NAME = "prod-oms.yaml"
+
+        PROD_ARGOCD_USERNAME=credentials("prod-argocd-cli-username")
+        PROD_ARGOCD_PASSWORD=credentials("prod-argocd-cli-password")
+
+        ARGOCD_APP_NAME="channel-management-core"
+  
+    }
+
+
+    stages {
+        stage ('Email notification') {
+            steps {
+                echo '>>> Send New application build notification'
+                mail bcc: '', body: """Dears,
+                A new build has been started for the Job [$JOB_NAME].
+                Below are the Build details:
+                Build Number : $BUILD_NUMBER
+                Build URL is : $BUILD_URL
+                Build Tag : $BUILD_TAG
+                Executor Number : $EXECUTOR_NUMBER
+                Workspace : $WORKSPACE
+                Thanks. """, cc: '', from: '', replyTo: '', subject: "New Build # [$BUILD_NUMBER] triggered for Job [$JOB_NAME]", to:"$EMAIL_TO"
+            }
+        }
+
+
+        stage("Generate setting.xml") {
+            steps {
+                    script{
+                        setting.setting()
+                }
+            }
+        }
+
+        stage('Build Jar') {
+            steps {
+                script{
+                    sh "mvn -s setting.xml --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true validate && mvn --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true  -DskipTests validate"
+                    sh "mvn -s setting.xml --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true validate && mvn --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true  -DskipTests clean install"
+                }
+             }
+        }
+        stage("Archive") {
+            steps {
+                script{
+                    java.archive()
+                }
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                script{
+                    deploy.imagebuild()
+                }
+            }
+        }
+        
+        stage('Update Gitlab For ArgoCD'){
+            steps{
+                script {
+                    wrap([$class: 'BuildUser']) {
+                        env.user = env.BUILD_USER
+                    }
+                    sh """ if [ -d ${WORKSPACE}/prod-env-channel-management-core ]; then break; else mkdir ${WORKSPACE}/prod-env-channel-management-core; fi """
+                     
+                }
+            }
+ 
+        } 
+        stage("Ansible Deployment"){
+            steps {
+                script{
+                     sleep 60
+                }
+            }
+
+        } 
+    }
+
+    post {
+        always {
+            echo 'I will always run, and I can clean up the workspace here......'
+        }
+        success {
+            mail bcc: '', body: """Dears,
+            Congratulations the build # $BUILD_NUMBER for the Job [$JOB_NAME] has successded.
+            Below are the Build details:
+            Build Number : $BUILD_NUMBER
+            Build URL is : $BUILD_URL
+            Build Tag : $BUILD_TAG
+            Node Name : $NODE_NAME
+            Executor Number : $EXECUTOR_NUMBER
+            Workspace : $WORKSPACE
+            Thanks. """, cc: '', from: '', replyTo: '', subject: "Build # [$BUILD_NUMBER] triggered for Job [$JOB_NAME] >> Success", to: "$EMAIL_TO"
+        }
+    }
+}
+
