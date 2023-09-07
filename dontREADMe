@@ -1,1 +1,9 @@
+Collect Logs in Loki:
 
+    Loki primarily deals with log data in JSON format. If your logs are in XML format, you might need to convert them to JSON before sending them to Loki. You can use tools like Fluentd, Logstash, or custom scripts to transform XML logs into JSON.
+
+
+
+Custom Parsing (Optional):
+
+    If your XML logs have a consistent structure, you might consider writing custom parsers or scripts to convert them into a more structured format like JSON before sending them to Loki. This can simplify querying and visualization.
